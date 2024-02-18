@@ -74,11 +74,8 @@ app.get('/api/users/:_id/logs', (req, res) => {
       User.findById(req.params._id).then(user => {
         if (user) {
           let count = 0;
-          const logs = user.exercises.filter((item) => {
+          const logs = user.exercises.filter((item) => {          
             
-            count ++;
-            
-            if (req.query.limit && count > req.query.limit) return false;
   
             if(req.query.from){
               const from = new Date(req.query.from)
@@ -89,6 +86,10 @@ app.get('/api/users/:_id/logs', (req, res) => {
               const to = new Date(req.query.to)
               if(item.date > to) return false;
             }
+
+            count ++;
+            
+            if (req.query.limit && count > req.query.limit) return false;
   
             return true;
           }).map(item => { return { description: item.description, duration: item.duration, date: item.date.toDateString() } });
