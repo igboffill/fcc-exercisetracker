@@ -43,20 +43,25 @@ app.get('/api/users', (req, res) => {
 app.post('/api/users/:_id/exercises', (req, res) => {
   if (req.params._id) {
     User.findById(req.params._id).then(user => {
+      const date = req.body.date ? new Date(req.body.date) : new Date();
+      
       if (user) {
         const ex = {
           description: req.body.description,
           duration: parseInt(req.body.duration) ,
-          date: new Date(req.body.date).toDateString()
+          date: date
         };
 
         user.exercises.push(ex);
         user.save().then(data => {
-          res.json({ _id: data._id, username: data.username, ...ex });
+          res.json({ _id: data._id, username: data.username, description: ex.description, duration: ex.duration,date:ex.date.toDateString() });
         }, err => {
           console.error(err)
           res.json({ error: "Ups!! Error at save new exercise." });
         });
+      }
+      else{
+        res.json({ error: "Ups!! User not found." });
       }
     }
     );
