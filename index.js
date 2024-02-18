@@ -46,8 +46,8 @@ app.post('/api/users/:_id/exercises', (req, res) => {
       if (user) {
         const ex = {
           description: req.body.description,
-          duration: req.body.duration,
-          date: req.body.date
+          duration: parseInt(req.body.duration) ,
+          date: new Date(req.body.date).toDateString()
         };
 
         user.exercises.push(ex);
@@ -85,7 +85,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
             }
   
             return true;
-          }).map(item => { return { description: item.description, duration: item.duration, date: item.date.toUTCString() } });
+          }).map(item => { return { description: item.description, duration: item.duration, date: item.date.toDateString() } });
   
           res.json({
             _id: user._id,
