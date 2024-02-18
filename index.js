@@ -54,6 +54,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
         user.save().then(data => {
           res.json({ _id: data._id, username: data.username, ...ex });
         }, err => {
+          log.error(err)
           res.json({ error: "Ups!! Error at save new exercise." });
         });
       }
